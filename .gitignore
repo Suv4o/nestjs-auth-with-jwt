@@ -3,7 +3,7 @@
 /node_modules
 
 # environment variables
-/envs
+/env
 
 # database
 db-data
