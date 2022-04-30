@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { typeOrmConfigAsync } from 'config/typeorm.config';
+import { AppController } from './app.controller';
+import { AuthConfig } from 'config/auth.config';
 
 @Module({
   imports: [
@@ -15,5 +17,7 @@ import { typeOrmConfigAsync } from 'config/typeorm.config';
     AuthModule,
     UserModule,
   ],
+  providers: [AuthConfig],
+  controllers: [AppController],
 })
 export class AppModule {}
