@@ -2,19 +2,25 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import * as OktaJwtVerifier from '@okta/jwt-verifier';
 import { AuthConfig } from '../../config/auth.config';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
-export class OktaGuard implements CanActivate, OnModuleInit {
-  constructor(private readonly authConfig: AuthConfig) {}
-  oktaJwtVerifier: any;
+export class OktaGuard implements CanActivate {
+  oktaJwtVerifier: OktaJwtVerifier;
 
-  onModuleInit() {
+  constructor(
+    private reflector: Reflector,
+    private readonly authConfig: AuthConfig,
+  ) {}
+
+  jwtVerifier(claims) {
+    console.log('Guard claims: ', claims);
+
     this.oktaJwtVerifier = new OktaJwtVerifier({
       issuer: this.authConfig.issuer,
       clientId: this.authConfig.clientId,
@@ -23,9 +29,13 @@ export class OktaGuard implements CanActivate, OnModuleInit {
       // }
     });
   }
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    const claims = this.reflector.get<string[]>('claims', context.getHandler());
+    this.jwtVerifier(claims);
+
     const token = context.getArgs()[0]?.headers?.authorization.split(' ')[1];
     return this.oktaJwtVerifier
       .verifyAccessToken(token, this.authConfig.audience)
