@@ -18,28 +18,31 @@ export class OktaGuard implements CanActivate {
     private readonly authConfig: AuthConfig,
   ) {}
 
-  jwtVerifier(claims) {
-    console.log('Guard claims: ', claims);
-
+  jwtVerifier(permissions) {
     this.oktaJwtVerifier = new OktaJwtVerifier({
       issuer: this.authConfig.issuer,
       clientId: this.authConfig.clientId,
-      // assertClaims: {
-      //   'groups.includes': ['developer']
-      // }
+      assertClaims: {
+        'permissions.includes': permissions,
+      },
     });
   }
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const claims = this.reflector.get<string[]>('claims', context.getHandler());
-    this.jwtVerifier(claims);
+    const permissions = this.reflector.get<string[]>(
+      'permissions',
+      context.getHandler(),
+    );
+
+    this.jwtVerifier(permissions);
 
     const token = context.getArgs()[0]?.headers?.authorization.split(' ')[1];
     return this.oktaJwtVerifier
       .verifyAccessToken(token, this.authConfig.audience)
-      .then(() => {
+      .then((details) => {
+        console.log(details);
         return true;
       })
       .catch((err) => {

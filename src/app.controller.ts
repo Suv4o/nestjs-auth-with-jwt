@@ -1,11 +1,11 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { OktaGuard } from './guards/okta.guard';
-import { Claims } from './decorators/claims.decorator';
+import { Permissions } from './decorators/permissions.decorator';
 
 @Controller()
 export class AppController {
   @Get('/hello')
-  @Claims('developer', 'admin')
+  @Permissions('Read', 'Delete')
   @UseGuards(OktaGuard)
   getHello() {
     return 'Hello World!';
