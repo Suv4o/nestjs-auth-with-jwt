@@ -4,10 +4,22 @@ import { Permissions } from './decorators/permissions.decorator';
 
 @Controller()
 export class AppController {
-  @Get('/hello')
-  @Permissions('Read', 'Delete')
+  @Get('/morning')
+  @Permissions('ADMIN', 'USER')
   @UseGuards(OktaGuard)
-  getHello() {
-    return 'Hello World!';
+  getMorning() {
+    return 'Good Morning!';
+  }
+
+  @Get('/afternoon')
+  @Permissions('DEVELOPER')
+  @UseGuards(OktaGuard)
+  getAfternoon() {
+    return 'Good Afternoon!';
+  }
+
+  @Get('/evening')
+  getEvening() {
+    return 'Good Evening!';
   }
 }

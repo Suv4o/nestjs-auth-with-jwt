@@ -11,6 +11,7 @@ import {
 enum Permissions {
   ADMIN = 'ADMIN',
   USER = 'USER',
+  DEVELOPER = 'DEVELOPER',
 }
 
 export class UserDto {
