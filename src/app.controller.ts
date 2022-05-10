@@ -1,19 +1,16 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { OktaGuard } from './guards/okta.guard';
-import { Permissions } from './decorators/permissions.decorator';
+import { Controller, Get } from '@nestjs/common';
+import { Auth } from './decorators/auth.decorator';
 
 @Controller()
 export class AppController {
   @Get('/morning')
-  @Permissions('ADMIN', 'USER')
-  @UseGuards(OktaGuard)
+  @Auth('ADMIN', 'USER')
   getMorning() {
     return 'Good Morning!';
   }
 
   @Get('/afternoon')
-  @Permissions('DEVELOPER')
-  @UseGuards(OktaGuard)
+  @Auth('ADMIN')
   getAfternoon() {
     return 'Good Afternoon!';
   }
