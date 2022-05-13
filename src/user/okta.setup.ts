@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { OktaSdkConfig } from '../../config/okta.sdk.config';
-// const okta = require('@okta/okta-sdk-nodejs');
 import { Client } from '@okta/okta-sdk-nodejs';
 
 @Injectable()
